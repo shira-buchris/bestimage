@@ -1,1 +1,2 @@
 #tttt
+print(2)
