@@ -1,0 +1,98 @@
+# =====================================
+
+# Python
+
+# =====================================
+
+**pycache**/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg-info/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+
+venv/
+.venv/
+env/
+ENV/
+
+# =====================================
+
+# Node.js / React
+
+# =====================================
+
+node_modules/
+dist/
+build/
+coverage/
+.npm/
+.next/
+.nuxt/
+.parcel-cache/
+
+# TypeScript
+
+*.tsbuildinfo
+
+# =====================================
+
+# Visual Studio Code
+
+# =====================================
+
+.vscode/
+
+# =====================================
+
+# Visual Studio / C#
+
+# =====================================
+
+.vs/
+bin/
+obj/
+TestResults/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# =====================================
+
+# Logs
+
+# =====================================
+
+*.log
+
+# =====================================
+
+# Environment / Secrets
+
+# =====================================
+
+.env
+.env.*
+appsettings.Development.json
+
+# =====================================
+
+# Your custom folders
+
+# =====================================
+
+EyesAndSmile/
+models/
+Photos/
+PhotosWedding/
+projecttowork/
+תיקייה חדשה/
+תמונות מחולקות/
