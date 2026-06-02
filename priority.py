@@ -1,7 +1,7 @@
 
 
 import folder2
-import division
+import mainAAA 
 import shutil
 
 
@@ -23,7 +23,7 @@ def merge(left_arr, right_arr):
     left_idx = right_idx = 0
 
     while left_idx < left_len and right_idx < right_len:
-        if division.DeepModel.milonAtmunotArashi[left_arr[left_idx]].score < division.DeepModel.milonAtmunotArashi[right_arr[right_idx]].score:
+        if mainAAA.DeepModel.milonAtmunotArashi[left_arr[left_idx]].score < mainAAA.DeepModel.milonAtmunotArashi[right_arr[right_idx]].score:
             merged.append(left_arr[left_idx])
             left_idx += 1
         else:
@@ -54,7 +54,7 @@ def priorityOfMan(arrpozot,path_folder):
         poza.selected_image=poza.images[0].image_id
         new_folder=path_folder/"Selected_Image"
         new_folder.mkdir(exist_ok=True)
-        shutil.copy(division.DeepModel.milonAtmunotArashi[poza.selected_image].path, new_folder)
+        shutil.copy(mainAAA.DeepModel.milonAtmunotArashi[poza.selected_image].path, new_folder)
 
 
 
