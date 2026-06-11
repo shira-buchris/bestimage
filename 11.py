@@ -238,9 +238,7 @@ def zimonAll(path_folder,model):
     # זימון ליצירת המבני נתונים לכל האנשים בתמונה. 
     Lafun = cv2.imread(image1)
     participants = process_and_show(None, Lafun, str(image1))
-    objectImage = ImageData(DeepModel.moneLamilonArashi, image1,  score=0.0, participants=participants) #???????????צריך חדות של תמונה ובהירות?
-    DeepModel.milonAtmunotArashi[DeepModel.moneLamilonArashi] = objectImage    # image1 
-    DeepModel.moneLamilonArashi += 1 
+
     # יצירת תיקייה בשם 1
     folder = "1"
     os.makedirs(folder, exist_ok=True)
@@ -253,7 +251,11 @@ def zimonAll(path_folder,model):
     image1_copy_path = os.path.join(folder, os.path.basename(image1))
     # shutil.copy(image1, image1_copy_path)                                       #?למה זה העתקה ולא העברה
     shutil.move(image1, image1_copy_path)                                      
-    current_path=image1_copy_path
+    current_path=image1_copy_path 
+
+    objectImage = ImageData(DeepModel.moneLamilonArashi, current_path,  score=0.0, participants=participants) #???????????צריך חדות של תמונה ובהירות?
+    DeepModel.milonAtmunotArashi[DeepModel.moneLamilonArashi] = objectImage    # image1 
+    DeepModel.moneLamilonArashi += 1 
     print(f"Created folder {folder} and copied first image")
 
     # לולאה על שאר הקובץ
@@ -261,9 +263,7 @@ def zimonAll(path_folder,model):
         image2 = lines[j] 
         Lafun = cv2.imread(image2)
         participants = process_and_show(None, Lafun, str(image2))
-        objectImage = ImageData(DeepModel.moneLamilonArashi, image2,  score=0.0, participants=participants ) #???????????צריך חדות של תמונה ובהירות?
-        DeepModel.milonAtmunotArashi[DeepModel.moneLamilonArashi] = image2  
-        DeepModel.moneLamilonArashi += 1
+
         # זימון ליצירת המבני נתונים לכל האנשים בתמונה. 
         # Lafun = cv2.imread(image2)
         # process_and_show(None, Lafun, str(image2))
@@ -280,6 +280,10 @@ def zimonAll(path_folder,model):
             image1_copy_path = str(new_path)
         else:
             image1_copy_path = image2
+
+        objectImage = ImageData(DeepModel.moneLamilonArashi, image1_copy_path,  score=0.0, participants=participants ) #???????????צריך חדות של תמונה ובהירות?
+        DeepModel.milonAtmunotArashi[DeepModel.moneLamilonArashi] = image2  
+        DeepModel.moneLamilonArashi += 1
         print(result)
 
         # הזזה קדימה

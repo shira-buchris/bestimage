@@ -81,7 +81,8 @@ TestResults/
 
 .env
 .env.*
-appsettings.Development.json
+appsettings.Development.json 
+best_smile_model.pth
 
 # =====================================
 

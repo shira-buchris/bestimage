@@ -5,6 +5,7 @@ list = [187,61,291,411]
 list2 = [] 
 def smile(imgFace):
     list2 = [] 
+    crop_width = imgFace.shape[1]
     #גישה למספרים קבועים במדיה פיפ
     fm = mp.solutions.face_mesh.FaceMesh(static_image_mode=True, refine_landmarks=True)
     # קריאת התמונה בצורה שתומכת בעברית ובכל השפות (numpy עוקף את הבעיה של OpenCV)
@@ -17,18 +18,20 @@ def smile(imgFace):
                 x = int(lm.x * w)
                 y = int(lm.y * h)
                 list2.append([x, y])
-            if len(list2) < 4:   # ← add this
-                return None
+    if len(list2) < 4:   # ← add this
+        return None
  
     #הלחיים - קטן
-    difference = abs(list2[0][0] - list2[1][0])
-    difference += abs(list2[2][0] - list2[3][0])
+    difference = (abs(list2[0][0] - list2[1][0])/ crop_width)
+    difference += (abs(list2[2][0] - list2[3][0]) / crop_width )
     #השפתיים - גדול
     difference2 = abs(list2[1][0] - list2[2][0])
     print(difference)
     print(difference2)
 
     return difference 
+
+
 
 # import cv2
 # import mediapipe as mp
@@ -112,10 +115,17 @@ def process_frame(frame, face_mesh):
                              face_landmarks.landmark[i].y)
                              for i in left_eye_indices]
                 left_ear = ear(left_eye)
+                
+                # right_ear = right_ear*100
+                # left_ear = left_ear*100
 
                 avg_ear = (right_ear + left_ear) / 2
 
-                openness_threshold = 0.22
+                print("right_ear:", right_ear)
+                print("left_ear:", left_ear)
+                print("avg_ear:", avg_ear)
+
+                openness_threshold =  0.22            #22
                 print(f"עין ימין: {'פתוחה' if right_ear > openness_threshold else 'סגורה'}")
                 print(f"עין שמאל: {'פתוחה' if left_ear > openness_threshold else 'סגורה'}")
 

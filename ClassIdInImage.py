@@ -1,3 +1,4 @@
+# מחלקת אדם בתמונה
 class ClassIdInImage: 
     def __init__(self, id ,Sharpness, eyes, smile,PriorityInImage):
         self.id = id 

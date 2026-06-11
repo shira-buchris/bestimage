@@ -1,0 +1,18 @@
+digraph "packages_VisualyProject" {
+rankdir=BT
+charset="utf-8"
+"ClassId" [color="black", label=<ClassId>, shape="box", style="solid"];
+"ClassIdInImage" [color="black", label=<ClassIdInImage>, shape="box", style="solid"];
+"ClassPoza" [color="black", label=<ClassPoza>, shape="box", style="solid"];
+"Classimage" [color="black", label=<Classimage>, shape="box", style="solid"];
+"PeopleInThePicture" [color="black", label=<PeopleInThePicture>, shape="box", style="solid"];
+"main" [color="black", label=<main>, shape="box", style="solid"];
+"priority" [color="black", label=<priority>, shape="box", style="solid"];
+"PeopleInThePicture" -> "ClassId" [arrowhead="open", arrowtail="none"];
+"PeopleInThePicture" -> "ClassIdInImage" [arrowhead="open", arrowtail="none"];
+"main" -> "ClassPoza" [arrowhead="open", arrowtail="none"];
+"main" -> "Classimage" [arrowhead="open", arrowtail="none"];
+"main" -> "PeopleInThePicture" [arrowhead="open", arrowtail="none"];
+"main" -> "priority" [arrowhead="open", arrowtail="none"];
+"priority" -> "PeopleInThePicture" [arrowhead="open", arrowtail="none"];
+}

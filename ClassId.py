@@ -3,6 +3,7 @@
 #     רשימת תמונות בהם משתתף
 #     עדיפות כללית
 #     גיל
+
 class ClassId:
     def __init__(self, person_id, embedding=None, count= 0, priority=0, age=None):
         self.person_id = person_id  # מזהה אחיד בין תמונות 

@@ -1,3 +1,4 @@
+# . ייבואים  
 import cv2
 import numpy as np
 from insightface.app import FaceAnalysis
@@ -57,6 +58,7 @@ ws["C1"] = "עדיפות"
 #                     cv2.FONT_HERSHEY_SIMPLEX, 0.6,
 #                     (0, 0, 255), 2)
 
+# ייחודי ID 
 def get_unique_id(new_embedding):
     global face_counter
     for face_id, person_class in person.items():
@@ -112,7 +114,7 @@ def process_and_show(folder_path,img, nativ):
             person_id = get_unique_id(face.embedding)
             person[person_id].add_count()
             person[person_id].add_priority(1/numFaces)
-            person[person_id].add_image(nativ)
+            person[person_id].add_image(nativ)                                    # ? את הנתיב ? לא את הקוד
         
             #ID = ClassId(person_id)
 
@@ -120,6 +122,18 @@ def process_and_show(folder_path,img, nativ):
             # לבדוק גיל-? כרגע לא
             # לתת עדיפות בתכונה באוביקט
             x1, y1, x2, y2 = face.bbox.astype(int)
+
+            h, w = img.shape[:2]
+            face_width = x2 - x1
+            face_height = y2 - y1
+
+            padding_x = int(face_width * 0.15)
+            padding_y = int(face_height * 0.15)
+
+            x1 = max(0, x1 - padding_x)
+            y1 = max(0, y1 - padding_y)
+            x2 = min(w, x2 + padding_x)
+            y2 = min(h, y2 + padding_y)
             face_img = img[y1:y2, x1:x2]
             print("---------------Eyes-----------") 
             #smileEyes(face_img)
@@ -129,8 +143,8 @@ def process_and_show(folder_path,img, nativ):
             # print(result)
 
 
-            blurry = laplacian(face_img)
-            print("Sharpness:", blurry, "id",person_id)
+            cadut = laplacian(face_img)
+            print("Sharpness:", cadut, "id",person_id)
 
             # eyes = 0.5  #process_frame(face_img)
             with mp_face_mesh.FaceMesh() as face_mesh:
@@ -142,7 +156,7 @@ def process_and_show(folder_path,img, nativ):
             smiling = smile(face_img)     #לשלוח לפונקציה שתחשב את זה. 
             if smiling is None:
                 smiling = 0.00
-            PriorityInImage = ( blurry*0.6 + eyes*0.13 + smiling*0.27 )/ numFaces #...כאן אמורה להיות הנוסחה של המוצלחות כפול עדיפות חלקי מספר המשתתפים או נוסחה חלופית. לא בדיוק
+            PriorityInImage = ( cadut*0.6 + eyes*0.13 + smiling*0.27 )/ numFaces #...כאן אמורה להיות הנוסחה של המוצלחות כפול עדיפות חלקי מספר המשתתפים או נוסחה חלופית. לא בדיוק
 
             # 1. יצירת תיקיית בדיקה (אם היא עדיין לא קיימת במחשב)
             output_dir = "debug_faces"
@@ -165,7 +179,7 @@ def process_and_show(folder_path,img, nativ):
 
 
             #יצירת אוביקט מסוג בנ"א בתמונה
-            arachimToBena = ClassIdInImage(person_id, blurry, eyes, smiling, PriorityInImage)
+            arachimToBena = ClassIdInImage(person_id, cadut, eyes, smiling, PriorityInImage)
             arrLabena.append(arachimToBena) 
             #העלאת המונה במילון
             #counts[person_id][0] += 1

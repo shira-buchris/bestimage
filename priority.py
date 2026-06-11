@@ -1,10 +1,9 @@
-
-
-import folder2
-import mainAAA 
+import PeopleInThePicture 
+# import main 
 import shutil
+import os 
 
-
+# חילוק למיון
 def split(arr):
     if len(arr) <= 1:
         return arr
@@ -15,7 +14,8 @@ def split(arr):
 
     return merge(left_arr, right_arr)
 
-def merge(left_arr, right_arr):
+# מיון מיזוג
+def merge(left_arr, right_arr, milonAtmunotArashi):
     merged = []
 
     left_len = len(left_arr)
@@ -23,7 +23,7 @@ def merge(left_arr, right_arr):
     left_idx = right_idx = 0
 
     while left_idx < left_len and right_idx < right_len:
-        if mainAAA.DeepModel.milonAtmunotArashi[left_arr[left_idx]].score < mainAAA.DeepModel.milonAtmunotArashi[right_arr[right_idx]].score:
+        if milonAtmunotArashi[left_arr[left_idx]].score < milonAtmunotArashi[right_arr[right_idx]].score:
             merged.append(left_arr[left_idx])
             left_idx += 1
         else:
@@ -37,26 +37,31 @@ def merge(left_arr, right_arr):
 
 
 
-
-def priorityOfMan(arrpozot,path_folder): 
+# עדיפות מעודכנת לאדם בתמונה
+def priorityAfter(arrpozot,path_folder, milonAtmunotArashi): 
     #תעבור על כל המערך שקיבלת-arrpozot
     #בכל פעם שאתה עומד על פוזה מסוימת
     for poza in arrpozot:
-        for image in poza.imagesInPoza:
+        for image_id  in poza.imagesInPoza:
             sum=0
+            image = milonAtmunotArashi[image_id]
             for particpant in image.participants:
-                particpant.PriorityInImage =particpant.PriorityInImage* folder2.person[particpant.person_id].priority
+                particpant.PriorityInImage =particpant.PriorityInImage* PeopleInThePicture.person[particpant.id].priority
                 sum+=particpant.PriorityInImage
                 #לכל תמונה בתוך הפוזה צריך לקבוע עדיפות שתהיה עכשיו אמיתית בהתאם לעדיפות הנכונה של כל האנשים שבתוכה 
             image.score=sum
         
-        split(poza.images)
-        poza.selected_image=poza.images[0].image_id
-        new_folder=path_folder/"Selected_Image"
-        new_folder.mkdir(exist_ok=True)
-        shutil.copy(mainAAA.DeepModel.milonAtmunotArashi[poza.selected_image].path, new_folder)
+        split(poza.imagesInPoza)
+        sorted_images = split(poza.imagesInPoza)
+        poza.selected_image = sorted_images[0]
+        #poza.selected_image=poza.images[0].image_id 
+        new_folder = os.path.join(path_folder,"Selected_Image") 
+        os.makedirs(new_folder,exist_ok=True)
+        # new_folder=path_folder/"Selected_Image" 
+        # new_folder.mkdir(exist_ok=True)
+        shutil.copy(milonAtmunotArashi[poza.selected_image].path, new_folder)
 
-
+    return new_folder 
 
     
 

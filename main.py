@@ -11,20 +11,30 @@ from keras.utils import Sequence
 from keras.layers import GlobalAveragePooling2D
 from keras import Model
 
-from folder2 import process_and_show
+from PeopleInThePicture import Processing_image
+from priority import priorityAfter 
 import cv2
 from Classimage import ImageData 
 from ClassPoza import Posa 
-   
+
+import sys
+
+
+if len(sys.argv) > 1:
+    folder_path = sys.argv[1] 
+
+madadDimion = 0.851 
+
 arrForFirstOne= []
+arrPozot = []            #מערך הפוזות של כל התמונות שבתוכו יש לכל פוזה מערך? של הקוד של התמונה הזו במילון התמונות הראשי.
+
 class DeepModel():
     '''MobileNet deep model.'''
     i=2
     milonAtmunotArashi = {}  
     moneLamilonArashi = 1
-    arrPozot = []            #מערך הפוזות של כל התמונות שבתוכו יש לכל פוזה מערך? של הקוד של התמונה הזו במילון התמונות הראשי.
-    arrtmunaBepoza = []               # המערך שיתחדש לכל פוזה בכל פעם עם התמונה והקוד שלה במילון הראשי ויכנס לתוך arrPozot.
-    #moneLmilon = 2               # משתנה בכל פעם איפה להכניס את התמונה בתוך arrtmunaBepoza
+    arrtmunaBepoza = []      # המערך שיתחדש לכל פוזה בכל פעם עם התמונה והקוד שלה במילון הראשי ויכנס לתוך arrPozot.
+    #moneLmilon = 2          # משתנה בכל פעם איפה להכניס את התמונה בתוך arrtmunaBepoza
     degelLepam1 = True  
     moneLearrPozot = 0  
 
@@ -42,7 +52,7 @@ class DeepModel():
         output = base_model.layers[output_layer].output
         output = GlobalAveragePooling2D()(output)
         model = Model(inputs=base_model.input, outputs=output)
-        return model
+        return model 
 
     # .והפעלתו . MobileNet המרת התמונה לפורמט
     @staticmethod
@@ -55,12 +65,12 @@ class DeepModel():
         x = model1.predict(x)
 
         x=x.flatten()
-        return x
+        return x 
 
     # .דימיון קוסינוס לתמונות
     @staticmethod
     def cosinus_dimion (input1, input2 ):
-        Dimion=np.dot(input1, input2.T) / (np.linalg.norm(input1) * np.linalg.norm(input2)) 
+        Dimion=np.dot(input1, input2.T) / (np.linalg.norm(input1) * np.linalg.norm(input2))  
         return Dimion 
     
     # חלוקה נכונה לתיקיות
@@ -69,8 +79,7 @@ class DeepModel():
         source=nativ2
         Dimion= model.cosinus_dimion(input1, input2)
         print("dimion:",Dimion)
-        if Dimion>0.851:
-            destination= nativ1
+        if Dimion>madadDimion:
             parent_dir = Path(nativ1).parent
             destination = parent_dir / Path(source).name
             shutil.move(source, destination)
@@ -91,7 +100,7 @@ class DeepModel():
             DeepModel.arrtmunaBepoza = []
             DeepModel.arrtmunaBepoza.append((DeepModel.moneLamilonArashi)-1) 
             objPoza = Posa(DeepModel.moneLearrPozot, new_folder, DeepModel.arrtmunaBepoza )
-            DeepModel.arrPozot.append(objPoza)
+            arrPozot.append(objPoza)
             DeepModel.moneLearrPozot += 1
 
         return Dimion, dest
@@ -120,54 +129,90 @@ def get_all_images(path_folder):
         return
     return lines 
 
+def read_image_unicode(path):
+    data = np.fromfile(path, dtype=np.uint8)
+    return cv2.imdecode(data, cv2.IMREAD_COLOR)
+
 # .טיפול בתמונה הראשונה  (כולל מבנת)
 def first_image(image1):
-    Lafun = cv2.imread(image1)
-    participants = process_and_show(None, Lafun, str(image1))
-    objectImage = ImageData(DeepModel.moneLamilonArashi, image1,  score=0.0, participants=participants) #???????????צריך חדות של תמונה ובהירות?
-    DeepModel.milonAtmunotArashi[DeepModel.moneLamilonArashi] = objectImage    # image1 
-    DeepModel.moneLamilonArashi += 1 
+    Lafun = read_image_unicode(image1) 
+    if Lafun is None:
+        raise ValueError(f"לא הצלחתי לקרוא את התמונה הראשונה: {image1}")
+    participants = Processing_image( Lafun, str(image1))
+
     folder = "1"
     os.makedirs(folder, exist_ok=True)
 
+    DeepModel.arrtmunaBepoza = []
     DeepModel.arrtmunaBepoza.append(1)
-    DeepModel.arrPozot.append(DeepModel.arrtmunaBepoza)
+
+    objPoza = Posa(
+        DeepModel.moneLearrPozot,
+        Path(folder),
+        DeepModel.arrtmunaBepoza
+    )
+
+    arrPozot.append(objPoza)
+
+    DeepModel.moneLearrPozot += 1
+    # DeepModel.arrtmunaBepoza.append(1)
+    # arrPozot.append(DeepModel.arrtmunaBepoza)
     image1_copy_path = os.path.join(folder, os.path.basename(image1))
-    shutil.move(image1, image1_copy_path)                                      
-    current_path=image1_copy_path
+    shutil.move(image1, image1_copy_path) 
+    current_path=image1_copy_path 
+
     print(f"Created folder {folder} and copied first image")
+
+    objectImage = ImageData(DeepModel.moneLamilonArashi, current_path,  score=0.0, participants=participants) #???????????צריך חדות של תמונה ובהירות?
+    DeepModel.milonAtmunotArashi[DeepModel.moneLamilonArashi] = objectImage    # image1 
+    DeepModel.moneLamilonArashi += 1 
     return current_path
 
 # . טיפול בשאר התמונות 
 def image(image2, image1_copy_path, model):                                                                                   # ? צריך לשלוח את המשתנים השני והשלישי  
-    Lafun = cv2.imread(image2)
-    participants = process_and_show(None, Lafun, str(image2))
-    objectImage = ImageData(DeepModel.moneLamilonArashi, image2,  score=0.0, participants=participants)                       #???????????צריך חדות של תמונה ובהירות?
-    DeepModel.milonAtmunotArashi[DeepModel.moneLamilonArashi] = objectImage   
-    DeepModel.moneLamilonArashi += 1 
+    Lafun = read_image_unicode(image2)
 
+    if Lafun is None:
+        raise ValueError(f"לא הצלחתי לקרוא את התמונה: {image2}")
+    participants = Processing_image(Lafun, str(image2))
+    
+    
         # חישוב דמיון
-    result = model.Division_into_folders(
-        model.preprocess_image(image1_copy_path, model._model),
-        model.preprocess_image(image2, model._model),
+    result = DeepModel.Division_into_folders(
+        DeepModel.preprocess_image(image1_copy_path, model._model),
+        DeepModel.preprocess_image(image2, model._model),
         image1_copy_path,
         image2
     )
+
     _, new_path = result
     if new_path is not None:
         image1_copy_path = str(new_path)
     else:
-        image1_copy_path = image2
+        image1_copy_path = image2 
+
+    objectImage = ImageData(DeepModel.moneLamilonArashi, image1_copy_path,  score=0.0, participants=participants)                       #???????????צריך חדות של תמונה ובהירות?
+    DeepModel.milonAtmunotArashi[DeepModel.moneLamilonArashi] = objectImage   
+    DeepModel.moneLamilonArashi += 1 
     print(result)
+
+    return image1_copy_path 
 
 # הפעלת כל הפונקציות
 def zimonAll(path_folder):
     
     lines = get_all_images(path_folder) 
+    if not lines:
+        return
     image1_copy_path = first_image(lines[0])
 
     # לולאה על שאר הקובץ
     for j in range(1, len(lines)):
-        image(lines[j], image1_copy_path, model)   
+        image1_copy_path = image(lines[j], image1_copy_path, model)   
 
-zimonAll(r"C:\myproject\PhotosWedding\1234")
+    selected_image = priorityAfter(arrPozot ,path_folder, DeepModel.milonAtmunotArashi)
+    print(selected_image) 
+
+# zimonAll(r"C:\myproject\PhotosWedding\1234")
+zimonAll(r"C:\myproject\debug_faces")   #r"C:\myproject\PhotosWedding\1234"folder_path
+
