@@ -97,3 +97,19 @@ PhotosWedding/
 projecttowork/
 תיקייה חדשה/
 תמונות מחולקות/
+
+
+
+# Images
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.tiff
+*.webp
+image/
+**/image/
+
+# Model
+best_smile_model.pth
