@@ -1,0 +1,15 @@
+{
+    "madadDimion": 0.851,
+    "safModel": 0.45,
+
+    "madadChadut": 0.6,
+    "madadEyes": 0.17,
+    "madadSmiling": 0.23, 
+
+    "minChadut": 0,
+    "maxChadut": 2500,
+
+    "minEyes": 0.10,
+    "maxEyes": 0.35
+} 
+

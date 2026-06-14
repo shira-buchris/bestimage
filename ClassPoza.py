@@ -1,11 +1,11 @@
 
 # מחלקת פוזה
 class Posa:
-    def __init__(self, IdPoza, folder_path, imagesInPoza):
+    def __init__(self, IdPoza, folder_path):  # , imagesInPoza
         self.IdPoza = IdPoza
         self.folder_path = folder_path
         self.selected_image = None  # התמונה הנבחרת
-        self.imagesInPoza = imagesInPoza            #מה זה? 
+        # self.imagesInPoza = imagesInPoza            #מה זה? 
         self.images = [] 
         
     def add_image(self, image):

@@ -10,7 +10,7 @@ class ClassId:
         self.embedding = embedding        ## לשאול את שושי בשביל מה אני צריכה בעצם לשמור את זה הרי זה כבר שמור בנתינת הID הייחודי.
         self.count = count              #כמות פעמים שהופיע. 
         self.priority = priority   # כמה הוא חשוב באירוע
-        self.images = set()         # סט של אובייקטי ImageData 
+        self.images = []         # סט של אובייקטי ImageData 
         #
         # ? self.age = age 
 
@@ -21,7 +21,7 @@ class ClassId:
         self.priority = self.priority + priNow
 
     def add_image(self, image):
-        self.images.add(image)
+        self.images.append(image)
 
     # def remove_image(self, image):
     #     self.images.discard(image)                  ?למה שאצטרך למחוק תמונה 

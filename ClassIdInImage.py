@@ -10,4 +10,4 @@ class ClassIdInImage:
         self.participants = []
         
     def addto(self,participant): 
-        self.participants.add(participant) 
+        self.participants.append(participant) 

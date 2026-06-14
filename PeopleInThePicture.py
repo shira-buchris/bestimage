@@ -1,6 +1,4 @@
 # . ייבואים  
-safModel = 0.45 
-
 import cv2
 from insightface.app import FaceAnalysis
 from scipy.spatial.distance import cosine
@@ -11,11 +9,25 @@ from ClassId import ClassId
 import mediapipe.python.solutions.face_mesh as mp_face_mesh 
 import os
 
-from tryTestModel import predict_one_image 
+from tryTestModel import predict_one_image  
+
+from kvuim import kvuim 
+
+safModel = kvuim["safModel"] 
 
 # אתחול המודל
 app = FaceAnalysis(name='buffalo_l', providers=['CPUExecutionProvider'])                           #אם זה לא עצמים בתנועה- זה בסדר.
 app.prepare(ctx_id=-1, det_size=(640, 640))
+
+madadChadut = kvuim["madadChadut"] 
+madadsmiling = kvuim["madadSmiling"] 
+madadEyes = kvuim["madadEyes"] 
+
+minChadut = kvuim["minChadut"]
+maxChadut = kvuim["maxChadut"]
+
+minEyes = kvuim["minEyes"]
+maxEyes = kvuim["maxEyes"]
 
 THRESHOLD = safModel                                                                                    # !! לשנות לקובץ חיצוני!!!קבוע!!
 person = {}
@@ -59,7 +71,7 @@ def Face_cutting(img, face):
 def Quality_measurement(face_img, numFaces, person_id): 
 
     cadut = laplacian(face_img)
-    print("Sharpness:", cadut, "id",person_id)
+    print("SharpnessMenu:", cadut, "id",person_id) 
 
     with mp_face_mesh.FaceMesh() as face_mesh:
         _, eyes = process_frame(face_img, face_mesh)
@@ -74,7 +86,7 @@ def Quality_measurement(face_img, numFaces, person_id):
         smiling = 0.00
     print("smile:", smiling)
 
-    PriorityInImage = ( cadut*0.6 + eyes*0.13 + smiling*0.27 )/ numFaces                                   #...כאן אמורה להיות הנוסחה של המוצלחות כפול עדיפות חלקי מספר המשתתפים או נוסחה חלופית. לא בדיוק
+    PriorityInImage = ( cadut*madadChadut + eyes*madadEyes + smiling*madadsmiling )/ numFaces                                   #...כאן אמורה להיות הנוסחה של המוצלחות כפול עדיפות חלקי מספר המשתתפים או נוסחה חלופית. לא בדיוק
 
     return cadut, eyes, smiling, PriorityInImage  
 
@@ -83,7 +95,7 @@ def One_face(face, img, nativ, numFaces, arrLabena):
     person_id = get_unique_id(face.embedding)
     person[person_id].add_count()
     person[person_id].add_priority(1/numFaces)
-    person[person_id].add_image(nativ)                                                                            # ? את הנתיב ? לא את הקוד
+    person[person_id].add_image(nativ)                                  
     face_img = Face_cutting(img, face)
 
     cadut, eyes, smiling, PriorityInImage = Quality_measurement(face_img, numFaces, person_id) 

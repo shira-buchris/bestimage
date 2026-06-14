@@ -30,7 +30,11 @@
 import cv2
 import numpy as np
 import tensorflow as tf
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt 
+from kvuim import kvuim 
+
+minChadut = kvuim["minChadut"]
+maxChadut = kvuim["maxChadut"] 
 
 #חישוב לפלסיאן
 def laplacian(face): 
@@ -48,4 +52,12 @@ def laplacian(face):
 
     #חישוב בהירות 
     #צריך לבדוק אם ואיך
-    return   laplacianImage   #,is_blurry
+    return   nirmul(laplacianImage)   #,is_blurry
+
+
+def nirmul(chadut): 
+    if maxChadut== minChadut: 
+        return 0 
+    nirm = (chadut-minChadut)/(maxChadut-minChadut) 
+    if nirm < 0: return 0 
+    if nirm > 1: return 1 

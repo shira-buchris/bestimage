@@ -1,3 +1,13 @@
-C:\myproject\debug_faces\face_id_1.jpg
-C:\myproject\debug_faces\face_id_2.jpg
-C:\myproject\debug_faces\face_id_3.jpg
+C:\myproject\image\IMG_1508.JPG
+C:\myproject\image\IMG_1509.JPG
+C:\myproject\image\IMG_1510.JPG
+C:\myproject\image\IMG_1511.JPG
+C:\myproject\image\IMG_1512.JPG
+C:\myproject\image\IMG_1513.JPG
+C:\myproject\image\IMG_1514.JPG
+C:\myproject\image\IMG_1515.JPG
+C:\myproject\image\IMG_1516.JPG
+C:\myproject\image\IMG_1517.JPG
+C:\myproject\image\IMG_1518.JPG
+C:\myproject\image\IMG_1519.JPG
+C:\myproject\image\IMG_1520.JPG

@@ -4,18 +4,18 @@ import shutil
 import os 
 
 # חילוק למיון
-def split(arr):
+def split(arr, milonAtmunotArashi):
     if len(arr) <= 1:
         return arr
 
     mid = len(arr) // 2
-    left_arr = split(arr[:mid])
-    right_arr = split(arr[mid:])
+    left_arr = split(arr[:mid], milonAtmunotArashi) 
 
-    return merge(left_arr, right_arr)
+    right_arr = split(arr[mid:], milonAtmunotArashi)
 
+    return merge(left_arr, right_arr, milonAtmunotArashi )
 # מיון מיזוג
-def merge(left_arr, right_arr, milonAtmunotArashi):
+def merge(left_arr, right_arr, milonAtmunotArashi): 
     merged = []
 
     left_len = len(left_arr)
@@ -42,8 +42,8 @@ def priorityAfter(arrpozot,path_folder, milonAtmunotArashi):
     #תעבור על כל המערך שקיבלת-arrpozot
     #בכל פעם שאתה עומד על פוזה מסוימת
     for poza in arrpozot:
-        for image_id  in poza.imagesInPoza:
-            sum=0
+        for image_id  in poza.images:
+            sum=0 
             image = milonAtmunotArashi[image_id]
             for particpant in image.participants:
                 particpant.PriorityInImage =particpant.PriorityInImage* PeopleInThePicture.person[particpant.id].priority
@@ -51,14 +51,16 @@ def priorityAfter(arrpozot,path_folder, milonAtmunotArashi):
                 #לכל תמונה בתוך הפוזה צריך לקבוע עדיפות שתהיה עכשיו אמיתית בהתאם לעדיפות הנכונה של כל האנשים שבתוכה 
             image.score=sum
         
-        split(poza.imagesInPoza)
-        sorted_images = split(poza.imagesInPoza)
-        poza.selected_image = sorted_images[0]
+        split(poza.images, milonAtmunotArashi)
+        sorted_images = split(poza.images, milonAtmunotArashi)
+
+        poza.selected_image = sorted_images[0]#לדאוג שהתוצאה תהיה הגבוהה ביותר ולא הקטנה... או במיון או מינוס אחת 
         #poza.selected_image=poza.images[0].image_id 
         new_folder = os.path.join(path_folder,"Selected_Image") 
         os.makedirs(new_folder,exist_ok=True)
         # new_folder=path_folder/"Selected_Image" 
         # new_folder.mkdir(exist_ok=True)
+
         shutil.copy(milonAtmunotArashi[poza.selected_image].path, new_folder)
 
     return new_folder 
@@ -86,13 +88,13 @@ def priorityAfter(arrpozot,path_folder, milonAtmunotArashi):
     
 
 
-def priorityToImage(participants, Image):
-    # :כדי לחשב את העדיפות של התמונה אצטרך להתחשב ב
-    # חדות, בהירות-מה קורה עם זה? צריך? , סכימת ערכי הוצלחים וסכימת ערכי הלא מוצלחים
-    # הנוסחה!!!! פשוטה מאד- 0.6 משקל לחדות ו-0.4 משקל למוצלחות ז"א סכימת המוצלחות של כל האנשים- מוצלחים ולא, כפול 0.4!!!
-    Successful = 0
-    for participant in participants: 
-       Successful+= participant.priority  
+# def priorityToImage(participants, Image):
+#     # :כדי לחשב את העדיפות של התמונה אצטרך להתחשב ב
+#     # חדות, בהירות-מה קורה עם זה? צריך? , סכימת ערכי הוצלחים וסכימת ערכי הלא מוצלחים
+#     # הנוסחה!!!! פשוטה מאד- 0.6 משקל לחדות ו-0.4 משקל למוצלחות ז"א סכימת המוצלחות של כל האנשים- מוצלחים ולא, כפול 0.4!!!
+#     Successful = 0
+#     for participant in participants: 
+#        Successful+= participant.priority  
     
     
-    return participants
+#     return participants
